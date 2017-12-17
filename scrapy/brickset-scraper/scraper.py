@@ -17,3 +17,12 @@ class BricksetSpider(scrapy.Spider):
             yield {
                 'name': split_name,
             }
+
+        next_page_selector = '.next a ::attr(href)'
+        click_next_page = response.css(next_page_selector).extract_first()
+        if click_next_page:
+                yield scrapy.Request(
+                    response.urljoin(click_next_page),
+                    callback=self.parse
+                )
+
